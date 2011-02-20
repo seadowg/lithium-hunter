@@ -86,7 +86,8 @@ while (True):
 		print ""		
 		print "Try this now:"	
 			
-		proMon("l","Type an 'l' to mine lithium","This game is about lithium. You can't get lithium without typing an 'l' can you? Try again.")
+		proMon("l","Type an 'l' to mine lithium","This game is about lithium." +
+				"You can't get lithium without typing an 'l' can you? Try again.")
 	
 		print ""
 		print ""
@@ -104,10 +105,10 @@ while (True):
 	#game loop
 	while (lithiums < 468):
 
-		proMon("l","Type an 'l' to mine lithium","This game is about lithium. You can't get lithium without typing an 'l' can you? Try again.")
+		proMon("l","Type an 'l' to mine lithium","This game is about lithium." +
+			"can't get lithium without typing an 'l' can you? Try again.")
 
-		#lithiums = lithiums + int(random.uniform(1,20))
-		lithiums = 468
+		lithiums = lithiums + int(random.uniform(1,20))
 		print "You have " + str(lithiums) + " lithiums"
 
 	if (lithiums == 468):
