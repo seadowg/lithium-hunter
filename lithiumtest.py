@@ -20,7 +20,6 @@
 
 
 import random
-import sqlite3
 
 #these functions prompt for input at command line and loop until accepted
 
@@ -36,11 +35,6 @@ def proLs(strLs, strTxt, strErr):#will accept any string from an array of string
 		print strErr
 		prompt = raw_input(strTxt + "...")
 	return prompt
-
-#set up db
-conn = sqlite3.connect("scores")
-c = conn.cursor()
-c.execute("Create Table scores (score NUMERIC, name TEXT)")
 	
 #intro text
 print "       _____ _______ _     _ _____ _     _ _______"      
@@ -114,10 +108,6 @@ while (True):
 	if (lithiums == 468):
 		print "You have the best amount of lithium! YOU WIN!"
 		print ""
-		string = "Insert Into scores values ('%d', '%s')" % \
-			(468, name)
-		c.execute(string)
-		conn.commit
 
 	else:
 		print "You have woken up in your bed with no lithiums. You lose"
