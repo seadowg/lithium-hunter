@@ -18,34 +18,10 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+import curses
 import random
 
-#these functions prompt for input at command line and loop until accepted
-
-def proMon(strTr, strTxt, strErr):#accepts only one string
-	prompt = raw_input(strTxt + "...")
-	while (prompt != strTr):
-		print strErr
-		prompt = raw_input(strTxt + "...")
-
-def proLs(strLs, strTxt, strErr):#will accept any string from an array of strings, returns accepted input
-	prompt = raw_input(strTxt  + "...")
-	while (prompt not in strLs):
-		print strErr
-		prompt = raw_input(strTxt + "...")
-	return prompt
-	
-#intro text
-print "       _____ _______ _     _ _____ _     _ _______"      
-print "|        |      |    |_____|   |   |     | |  |  |"
-print "|_____ __|__    |    |     | __|__ |_____| |  |  |"
-print "_     _ _     _ __   _ _______ _______  ______"
-print "|_____| |     | | \  |    |    |______ |_____/"
-print "|     | |_____| |  \_|    |    |______ |    \_"
-print ""
-print ""
-
+"""
 
 print "Welcome to Lithium Hunter"
 print "Concept by Colin Bramwell, Alexander Robinson and Tom Mckenna"
@@ -94,32 +70,91 @@ while (True):
 		print "ENJOY!"
 		intro = 1
 
-	lithiums = int(0)
-	
-	#game loop
-	while (lithiums < 468):
+"""
 
-		proMon("l","Type an 'l' to mine lithium","This game is about lithium." +
-			"can't get lithium without typing an 'l' can you? Try again.")
+MAX_LITHIUMS = 468
 
-		lithiums = lithiums + int(random.uniform(1,20))
-		print "You have " + str(lithiums) + " lithiums"
+def retryOrQuit(window, y=1, x=2):
+  while True:
+    window.addstr(y, x, "(R)etry or (Q)uit ?")
+    key = window.getkey()
+    if key in "rR":
+      return True
+    elif key in "qQ":
+      return False
+    else:
+      curses.flash()
 
-	if (lithiums == 468):
-		print "You have the best amount of lithium! YOU WIN!"
-		print ""
-
-	else:
-		print "You have woken up in your bed with no lithiums. You lose"
-		print ""
-
-	useIn = proLs(["yes","no"],"Would you like to play again?","Type 'yes' or 'no' dumbass!")
-
-	if (useIn == "yes"):
-		print ""
-
-	else:	
-		print ""
-		print "Bai bai! Happy lorgyhumming!"
-		break
+def main(window):
+  
+  maxY, maxX = window.getmaxyx()
+  
+  titleWin = window.derwin(8, maxX, 0, 0)
+  
+  titleCenter = int( (maxX-51)/2 )
+  titleWin.addstr(0, titleCenter, "       _____ _______ _     _ _____ _     _ _______")
+  titleWin.addstr(1, titleCenter, "|        |      |    |_____|   |   |     | |  |  |")
+  titleWin.addstr(2, titleCenter, "|_____ __|__    |    |     | __|__ |_____| |  |  |")
+  titleWin.addstr(3, titleCenter, "_     _ _     _ __   _ _______ _______  ______    ")
+  titleWin.addstr(4, titleCenter, "|_____| |     | | \  |    |    |______ |_____/    ")
+  titleWin.addstr(5, titleCenter, "|     | |_____| |  \_|    |    |______ |    \_    ")
+  
+  titleWin.refresh()
+  
+  inputWin = window.derwin(2, maxX, 10, 0)
+  graphWin = window.derwin(3, maxX, 13, 0)
+  
+  lithiums = 0
+  
+  while True:
+    
+    # get the input
+    inputWin.addstr(1, 2, "Type an 'l' to mine lithium")
+    inputWin.refresh()
+    key = inputWin.getkey()
+    
+    # error check
+    if key in "lL":
+      pass
+    elif key in "EeQq":
+      return
+    else:
+      inputWin.addstr(0, 1, "This game is about lithium. can't get lithium without typing an 'l' can you? Try again.")
+      continue
+    
+    # game
+    inputWin.addstr(0, 0, " "*maxX)
+    lithiums += int( random.uniform(1,20) )
+    
+    # clear screen
+    inputWin.clear()
+    
+    if lithiums > MAX_LITHIUMS:
+      inputWin.addstr(0, 1, "You have woken up in your bed with no lithiums. You lose")
+      if retryOrQuit(inputWin):
+        lithiums = 0
+        inputWin.clear()
+      else:
+        return
+    elif lithiums == MAX_LITHIUMS:
+      inputWin.addstr(0, 1, "You have the best amount of lithium! YOU WIN!")
+      if retryOrQuit(inputWin):
+        lithiums = 0
+        inputWin.clear()
+      else:
+        return
+    else:
+      inputWin.addstr(0, 1, "You have {0} lithiums".format(lithiums) )
+    
+    ## draw progree bar
+    graphWin.clear()
+    graphWin.border(0)
+    graphWin.hline(1, 1, curses.ACS_BLOCK, int(lithiums * ((maxX-2)/(MAX_LITHIUMS+0.0))) )
+    graphWin.refresh()
+  
+  inputWin.getkey()
+    
+if __name__ == "__main__":
+  curses.wrapper(main)
+  print "Bai bai! Happy lorgyhumming!"
 
