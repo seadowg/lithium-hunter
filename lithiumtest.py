@@ -95,9 +95,9 @@ def main(window):
   titleWin.addstr(0, titleCenter, "       _____ _______ _     _ _____ _     _ _______")
   titleWin.addstr(1, titleCenter, "|        |      |    |_____|   |   |     | |  |  |")
   titleWin.addstr(2, titleCenter, "|_____ __|__    |    |     | __|__ |_____| |  |  |")
-  titleWin.addstr(3, titleCenter, "_     _ _     _ __   _ _______ _______  ______    ")
-  titleWin.addstr(4, titleCenter, "|_____| |     | | \  |    |    |______ |_____/    ")
-  titleWin.addstr(5, titleCenter, "|     | |_____| |  \_|    |    |______ |    \_    ")
+  titleWin.addstr(3, titleCenter, "  _     _ _     _ __   _ _______ _______  ______  ")
+  titleWin.addstr(4, titleCenter, "  |_____| |     | | \  |    |    |______ |_____/  ")
+  titleWin.addstr(5, titleCenter, "  |     | |_____| |  \_|    |    |______ |    \_  ")
   
   titleWin.refresh()
   
