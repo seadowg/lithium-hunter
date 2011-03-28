@@ -3,7 +3,7 @@
 #   Lithium Hunter
 
 #
-#   Copyright (C) 2010  Callum Stott 
+#   Copyright (C) 2010  Callum Stott
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 
 import curses
 import random
-
 
 class LithiumHunter(object):
     
@@ -39,23 +38,23 @@ class LithiumHunter(object):
     self._graphColour = 1
     
     # draw the title
-    titleCenter = int( (self._maxX-51)/2 )
-    titleWin.addstr(0, titleCenter, "       _____ _______ _     _ _____ _     _ _______")
-    titleWin.addstr(1, titleCenter, "|        |      |    |_____|   |   |     | |  |  |")
-    titleWin.addstr(2, titleCenter, "|_____ __|__    |    |     | __|__ |_____| |  |  |")
-    titleWin.addstr(3, titleCenter, "  _     _ _     _ __   _ _______ _______  ______  ")
-    titleWin.addstr(4, titleCenter, "  |_____| |     | | \  |    |    |______ |_____/  ")
-    titleWin.addstr(5, titleCenter, "  |     | |_____| |  \_|    |    |______ |    \_  ")
-    titleWin.addstr(6, titleCenter, "            Welcome to Lithium Hunter             ")
+    tCenter = int( (self._maxX-51)/2 )
+    titleWin.addstr(0, tCenter, "       _____ _______ _     _ _____ _     _ _______")
+    titleWin.addstr(1, tCenter, "|        |      |    |_____|   |   |     | |  |  |")
+    titleWin.addstr(2, tCenter, "|_____ __|__    |    |     | __|__ |_____| |  |  |")
+    titleWin.addstr(3, tCenter, "  _     _ _     _ __   _ _______ _______  ______  ")
+    titleWin.addstr(4, tCenter, "  |_____| |     | | \  |    |    |______ |_____/  ")
+    titleWin.addstr(5, tCenter, "  |     | |_____| |  \_|    |    |______ |    \_  ")
+    titleWin.addstr(6, tCenter, "            Welcome to Lithium Hunter             ")
     titleWin.refresh()
   
   def _setGraphColour(self, colour):
     if colour == "red":
-      curses.init_pair(self._graphColour, curses.COLOR_RED,     curses.COLOR_BLACK)
+      curses.init_pair(self._graphColour, curses.COLOR_RED,     curses.COLOR_RED)
     elif colour == "green":
-      curses.init_pair(self._graphColour, curses.COLOR_GREEN,   curses.COLOR_BLACK)
+      curses.init_pair(self._graphColour, curses.COLOR_GREEN,   curses.COLOR_GREEN)
     elif colour == "amber":
-      curses.init_pair(self._graphColour, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+      curses.init_pair(self._graphColour, curses.COLOR_MAGENTA, curses.COLOR_MAGENTA)
     else:
       raise AttributeError("Invalid colour")
   
@@ -63,9 +62,9 @@ class LithiumHunter(object):
     while True:
       self._inputWin.addstr(y, x, "(R)etry or (Q)uit ?")
       key = self._inputWin.getkey()
-      if key in "rR":
+      if key == "r":
         return True
-      elif key in "qQ":
+      elif key == "q":
         return False
       else:
         curses.flash()
@@ -124,11 +123,11 @@ class LithiumHunter(object):
       key = self._inputWin.getkey()
       
       # error check
-      if key in "lL":
+      if key == "l":
         self._lithiums += int( random.uniform(1,20) )
-      elif key in "Cc":
+      elif key == "c":
         self._lithiums = LithiumHunter.MAX_LITHIUMS
-      elif key in "EeQq":
+      elif key == "q":
         return False
       else:
         self._inputWin.addstr(0, 1, "This game is about lithium. can't get lithium without typing an 'l' can you? Try again.")
@@ -143,7 +142,7 @@ class LithiumHunter(object):
         self._setGraphColour("green")
       else:
         self._setGraphColour("amber")
-      graphLen = int( self._lithiums * ((self._maxX-2)/(LithiumHunter.MAX_LITHIUMS+0.0)) )
+      graphLen = int( self._lithiums * ((self._maxX-1)/(LithiumHunter.MAX_LITHIUMS+0.0)) )
       if graphLen > self._maxX-2:
         graphLen = self._maxX-2
       for i in range(1, graphLen):
