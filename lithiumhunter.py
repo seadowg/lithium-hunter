@@ -142,7 +142,7 @@ class LithiumHunter(object):
         self._setGraphColour("green")
       else:
         self._setGraphColour("amber")
-      graphLen = int( self._lithiums * ((self._maxX-1)/(LithiumHunter.MAX_LITHIUMS+0.0)) )
+      graphLen = int( self._lithiums * ((self._maxX-2)/(LithiumHunter.MAX_LITHIUMS+0.0)) )
       if graphLen > self._maxX-2:
         graphLen = self._maxX-2
       for i in range(1, graphLen):
