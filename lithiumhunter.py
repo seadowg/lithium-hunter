@@ -36,6 +36,7 @@ class LithiumHunter(object):
     titleWin = window.derwin(8, self._maxX, 0, 0)
     self._inputWin = window.derwin(2, self._maxX, 10, 0)
     self._graphWin = window.derwin(3, self._maxX, 13, 0)
+    self._graphColour = 1
     
     # draw the title
     titleCenter = int( (self._maxX-51)/2 )
@@ -47,6 +48,16 @@ class LithiumHunter(object):
     titleWin.addstr(5, titleCenter, "  |     | |_____| |  \_|    |    |______ |    \_  ")
     titleWin.addstr(6, titleCenter, "            Welcome to Lithium Hunter             ")
     titleWin.refresh()
+  
+  def _setGraphColour(self, colour):
+    if colour == "red":
+      curses.init_pair(self._graphColour, curses.COLOR_RED, curses.COLOR_BLACK)
+    elif colour == "green":
+      curses.init_pair(self._graphColour, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    elif colour == "amber":
+      curses.init_pair(self._graphColour, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+    else:
+      raise AttributeError("Invalid colour")
   
   def _retryOrQuit(self, y=1, x=2):
     while True:
@@ -100,6 +111,10 @@ class LithiumHunter(object):
   def mainGame(self):
     
     self._lithiums = 0
+    self._inputWin.clear()
+    self._inputWin.refresh()
+    self._graphWin.clear()
+    self._graphWin.refresh()
     
     while True:
       
@@ -110,43 +125,44 @@ class LithiumHunter(object):
       
       # error check
       if key in "lL":
-        pass
+        self._lithiums += int( random.uniform(1,20) )
+      elif key in "Cc":
+        self._lithiums = LithiumHunter.MAX_LITHIUMS
       elif key in "EeQq":
-        return
+        return -1
       else:
         self._inputWin.addstr(0, 1, "This game is about lithium. can't get lithium without typing an 'l' can you? Try again.")
         continue
       
-      # game
-      self._inputWin.addstr(0, 0, " "*self._maxX)
-      self._lithiums += int( random.uniform(1,20) )
+      ## draw progress bar
+      self._graphWin.clear()
+      self._graphWin.border(0)
+      if self._lithiums > LithiumHunter.MAX_LITHIUMS:
+        self._setGraphColour("red")
+      elif self._lithiums == LithiumHunter.MAX_LITHIUMS:
+        self._setGraphColour("green")
+      else:
+        self._setGraphColour("amber")
+      graphLen = int( self._lithiums * ((self._maxX-2)/(LithiumHunter.MAX_LITHIUMS+0.0)) )
+      if graphLen > self._maxX-2:
+        graphLen = self._maxX-2
+      for i in range(1, graphLen):
+        self._graphWin.addch( 1, i, curses.ACS_BLOCK, curses.color_pair(self._graphColour) )
+      self._graphWin.refresh()
+
       
       # clear screen
       self._inputWin.clear()
       
       if self._lithiums > LithiumHunter.MAX_LITHIUMS:
         self._inputWin.addstr(0, 1, "You have woken up in your bed with no lithiums. You lose")
-        if self._retryOrQuit():
-          self._lithiums = 0
-          self._inputWin.clear()
-        else:
-          return
+        return self._retryOrQuit()
       elif self._lithiums == LithiumHunter.MAX_LITHIUMS:
         self._inputWin.addstr(0, 1, "You have the best amount of lithium! YOU WIN!")
-        if self._retryOrQuit():
-          self._lithiums = 0
-          self._inputWin.clear()
-        else:
-          return
+        return self._retryOrQuit()
       else:
         self._inputWin.addstr(0, 1, "You have {0} lithiums".format(self._lithiums) )
       
-      ## draw progree bar
-      self._graphWin.clear()
-      self._graphWin.border(0)
-      self._graphWin.hline(1, 1, curses.ACS_BLOCK, int(self._lithiums * ((self._maxX-2)/(LithiumHunter.MAX_LITHIUMS+0.0))) )
-      self._graphWin.refresh()
-
 if __name__ == "__main__":
   # Initialize curses
   stdscr = curses.initscr()
@@ -163,7 +179,8 @@ if __name__ == "__main__":
     game = LithiumHunter(stdscr)
     game.getName()
     game.tutorial()
-    game.mainGame()
+    while game.mainGame():
+      pass
     print "Bai bai! Happy lorgyhumming!"
   
   # pick up any errors
