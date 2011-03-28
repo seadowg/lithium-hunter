@@ -51,9 +51,9 @@ class LithiumHunter(object):
   
   def _setGraphColour(self, colour):
     if colour == "red":
-      curses.init_pair(self._graphColour, curses.COLOR_RED, curses.COLOR_BLACK)
+      curses.init_pair(self._graphColour, curses.COLOR_RED,     curses.COLOR_BLACK)
     elif colour == "green":
-      curses.init_pair(self._graphColour, curses.COLOR_GREEN, curses.COLOR_BLACK)
+      curses.init_pair(self._graphColour, curses.COLOR_GREEN,   curses.COLOR_BLACK)
     elif colour == "amber":
       curses.init_pair(self._graphColour, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
     else:
@@ -129,7 +129,7 @@ class LithiumHunter(object):
       elif key in "Cc":
         self._lithiums = LithiumHunter.MAX_LITHIUMS
       elif key in "EeQq":
-        return -1
+        return False
       else:
         self._inputWin.addstr(0, 1, "This game is about lithium. can't get lithium without typing an 'l' can you? Try again.")
         continue
@@ -181,14 +181,14 @@ if __name__ == "__main__":
     game.tutorial()
     while game.mainGame():
       pass
-    print "Bai bai! Happy lorgyhumming!"
+    msg = "Bai bai! Happy lorgyhumming!"
   
   # pick up any errors
   except KeyboardInterrupt:
-    print "Next time press q to exit"
-  #except Exception as e:
-  #  print "Sorry somthing went wrong"
-  #  print "\t({0})".format(e)
+    msg =  "Next time press q to exit" # TODO not working ??
+  except Exception as e:
+    msg =  "Sorry somthing went wrong"
+    msg += "\t({0})".format(e)
   
   # allways reset the screen
   finally:
@@ -199,6 +199,7 @@ if __name__ == "__main__":
     curses.endwin()
   
   # final message
+  print msg
   print
   print "Concept by Colin Bramwell, Alexander Robinson and Tom Mckenna"
   print "Coded by Callum Stott and Guy Taylor"
