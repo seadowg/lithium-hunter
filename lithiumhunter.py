@@ -21,20 +21,51 @@
 import curses
 import random
 
-"""
-  print "Welcome to Lithium Hunter"
-#ask user to start
-name = raw_input("Type your name to begin your journey...")
 
-#start game
-intro = 0
-
-while (True):
-	
-	#tutorial
-	if (intro == 0):
-
-		print ""
+class LithiumHunter(object):
+    
+  MAX_LITHIUMS = 468
+  
+  def __init__(self, window):
+    """ window is the main curses window to draw the CLI """
+    # game vars
+    self._lithiums = 0
+    
+    # screen vars
+    self._maxY, self._maxX = window.getmaxyx()
+    titleWin = window.derwin(8, self._maxX, 0, 0)
+    self._inputWin = window.derwin(2, self._maxX, 10, 0)
+    self._graphWin = window.derwin(3, self._maxX, 13, 0)
+    
+    # draw the title
+    titleCenter = int( (self._maxX-51)/2 )
+    titleWin.addstr(0, titleCenter, "       _____ _______ _     _ _____ _     _ _______")
+    titleWin.addstr(1, titleCenter, "|        |      |    |_____|   |   |     | |  |  |")
+    titleWin.addstr(2, titleCenter, "|_____ __|__    |    |     | __|__ |_____| |  |  |")
+    titleWin.addstr(3, titleCenter, "  _     _ _     _ __   _ _______ _______  ______  ")
+    titleWin.addstr(4, titleCenter, "  |_____| |     | | \  |    |    |______ |_____/  ")
+    titleWin.addstr(5, titleCenter, "  |     | |_____| |  \_|    |    |______ |    \_  ")
+    titleWin.addstr(6, titleCenter, "            Welcome to Lithium Hunter             ")
+    titleWin.refresh()
+  
+  def _retryOrQuit(self, y=1, x=2):
+    while True:
+      self._inputWin.addstr(y, x, "(R)etry or (Q)uit ?")
+      key = self._inputWin.getkey()
+      if key in "rR":
+        return True
+      elif key in "qQ":
+        return False
+      else:
+        curses.flash()
+  
+  def getName(self):
+    #name = raw_input("Type your name to begin your journey...")
+    pass
+  
+  def tutorial(self):
+    """
+    print ""
 		print "Congratulations! You have entered into the lucrative business of Lithium Mining."
 		print "The greatest of all alkali metals."
 		print "I am you friendly guide... your... assistant you might say and"
@@ -64,95 +95,94 @@ while (True):
 		print "If you get more than 468 lithiums, you will wake up in your bed with no lithiums!"
 		print "ENJOY!"
 		intro = 1
+		"""
 
-"""
-
-MAX_LITHIUMS = 468
-
-def retryOrQuit(window, y=1, x=2):
-  while True:
-    window.addstr(y, x, "(R)etry or (Q)uit ?")
-    key = window.getkey()
-    if key in "rR":
-      return True
-    elif key in "qQ":
-      return False
-    else:
-      curses.flash()
-
-def main(window):
-  
-  maxY, maxX = window.getmaxyx()
-  
-  titleWin = window.derwin(8, maxX, 0, 0)
-  
-  titleCenter = int( (maxX-51)/2 )
-  titleWin.addstr(0, titleCenter, "       _____ _______ _     _ _____ _     _ _______")
-  titleWin.addstr(1, titleCenter, "|        |      |    |_____|   |   |     | |  |  |")
-  titleWin.addstr(2, titleCenter, "|_____ __|__    |    |     | __|__ |_____| |  |  |")
-  titleWin.addstr(3, titleCenter, "  _     _ _     _ __   _ _______ _______  ______  ")
-  titleWin.addstr(4, titleCenter, "  |_____| |     | | \  |    |    |______ |_____/  ")
-  titleWin.addstr(5, titleCenter, "  |     | |_____| |  \_|    |    |______ |    \_  ")
-  
-  titleWin.refresh()
-  
-  inputWin = window.derwin(2, maxX, 10, 0)
-  graphWin = window.derwin(3, maxX, 13, 0)
-  
-  lithiums = 0
-  
-  while True:
+  def mainGame(self):
     
-    # get the input
-    inputWin.addstr(1, 2, "Type an 'l' to mine lithium")
-    inputWin.refresh()
-    key = inputWin.getkey()
+    self._lithiums = 0
     
-    # error check
-    if key in "lL":
-      pass
-    elif key in "EeQq":
-      return
-    else:
-      inputWin.addstr(0, 1, "This game is about lithium. can't get lithium without typing an 'l' can you? Try again.")
-      continue
-    
-    # game
-    inputWin.addstr(0, 0, " "*maxX)
-    lithiums += int( random.uniform(1,20) )
-    
-    # clear screen
-    inputWin.clear()
-    
-    if lithiums > MAX_LITHIUMS:
-      inputWin.addstr(0, 1, "You have woken up in your bed with no lithiums. You lose")
-      if retryOrQuit(inputWin):
-        lithiums = 0
-        inputWin.clear()
-      else:
+    while True:
+      
+      # get the input
+      self._inputWin.addstr(1, 2, "Type an 'l' to mine lithium")
+      self._inputWin.refresh()
+      key = self._inputWin.getkey()
+      
+      # error check
+      if key in "lL":
+        pass
+      elif key in "EeQq":
         return
-    elif lithiums == MAX_LITHIUMS:
-      inputWin.addstr(0, 1, "You have the best amount of lithium! YOU WIN!")
-      if retryOrQuit(inputWin):
-        lithiums = 0
-        inputWin.clear()
       else:
-        return
-    else:
-      inputWin.addstr(0, 1, "You have {0} lithiums".format(lithiums) )
-    
-    ## draw progree bar
-    graphWin.clear()
-    graphWin.border(0)
-    graphWin.hline(1, 1, curses.ACS_BLOCK, int(lithiums * ((maxX-2)/(MAX_LITHIUMS+0.0))) )
-    graphWin.refresh()
-  
-  inputWin.getkey()
-    
+        self._inputWin.addstr(0, 1, "This game is about lithium. can't get lithium without typing an 'l' can you? Try again.")
+        continue
+      
+      # game
+      self._inputWin.addstr(0, 0, " "*self._maxX)
+      self._lithiums += int( random.uniform(1,20) )
+      
+      # clear screen
+      self._inputWin.clear()
+      
+      if self._lithiums > LithiumHunter.MAX_LITHIUMS:
+        self._inputWin.addstr(0, 1, "You have woken up in your bed with no lithiums. You lose")
+        if self._retryOrQuit():
+          self._lithiums = 0
+          self._inputWin.clear()
+        else:
+          return
+      elif self._lithiums == LithiumHunter.MAX_LITHIUMS:
+        self._inputWin.addstr(0, 1, "You have the best amount of lithium! YOU WIN!")
+        if self._retryOrQuit():
+          self._lithiums = 0
+          self._inputWin.clear()
+        else:
+          return
+      else:
+        self._inputWin.addstr(0, 1, "You have {0} lithiums".format(self._lithiums) )
+      
+      ## draw progree bar
+      self._graphWin.clear()
+      self._graphWin.border(0)
+      self._graphWin.hline(1, 1, curses.ACS_BLOCK, int(self._lithiums * ((self._maxX-2)/(LithiumHunter.MAX_LITHIUMS+0.0))) )
+      self._graphWin.refresh()
+
 if __name__ == "__main__":
-  curses.wrapper(main)
+  # Initialize curses
+  stdscr = curses.initscr()
+  curses.noecho()
+  curses.cbreak()
+  stdscr.keypad(1)
+  try:
+    curses.start_color()
+  except:
+    pass
+  
+  # run the game
+  try:
+    game = LithiumHunter(stdscr)
+    game.getName()
+    game.tutorial()
+    game.mainGame()
+    print "Bai bai! Happy lorgyhumming!"
+  
+  # pick up any errors
+  except KeyboardInterrupt:
+    print "Next time press q to exit"
+  #except Exception as e:
+  #  print "Sorry somthing went wrong"
+  #  print "\t({0})".format(e)
+  
+  # allways reset the screen
+  finally:
+    # Set everything back to normal
+    stdscr.keypad(0)
+    curses.echo()
+    curses.nocbreak()
+    curses.endwin()
+  
+  # final message
   print
-  print "Bai bai! Happy lorgyhumming!"
   print "Concept by Colin Bramwell, Alexander Robinson and Tom Mckenna"
   print "Coded by Callum Stott and Guy Taylor"
   print
