@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Lithium Hunter
+Version=0.1
+Comment=A simple game
+GenericName=Lithium Hunter
+Terminal=true
+Icon=twisted-zombie-icon.png
+Type=Application
+Exec=python /usr/share/lithiumhunter/lithiumhunter.py
+Categories=Game;

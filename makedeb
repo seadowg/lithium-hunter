@@ -1,0 +1,2 @@
+#!/bin/bash
+dpkg --build debpackage/ lithiumhunter-0.1_all.deb
