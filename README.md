@@ -25,3 +25,6 @@ enchantatle is significantly reduced!
 
 * Callum Stott
 
+###Open Source Love
+
+*Chris Brown
