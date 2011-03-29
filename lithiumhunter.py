@@ -118,20 +118,15 @@ class LithiumHunter(object):
     while True:
       
       # get the input
-      self._inputWin.addstr(1, 2, "Type an 'l' to mine lithium")
+      self._inputWin.addstr(1, 2, "Type an 'l' to mine lithium:")
       self._inputWin.refresh()
       key = self._inputWin.getkey()
       
       # error check
-      if key == "l":
+      if key == "l" or key == "L":
         self._lithiums += int( random.uniform(1,20) )
-      elif key == "c":
-        self._lithiums = LithiumHunter.MAX_LITHIUMS
-      elif key == "q":
+      elif key == "q" or key == "Q":
         return False
-      else:
-        self._inputWin.addstr(0, 1, "This game is about lithium. can't get lithium without typing an 'l' can you? Try again.")
-        continue
       
       ## draw progress bar
       self._graphWin.clear()
@@ -196,11 +191,4 @@ if __name__ == "__main__":
     curses.echo()
     curses.nocbreak()
     curses.endwin()
-  
-  # final message
-  print msg
-  print
-  print "Concept by Colin Bramwell, Alexander Robinson and Tom Mckenna"
-  print "Coded by Callum Stott and Guy Taylor"
-  print
 
