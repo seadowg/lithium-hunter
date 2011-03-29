@@ -24,7 +24,5 @@ enchantatle is significantly reduced!
 ### Coding
 
 * Callum Stott
-
-###Open Source Love
-
+* Guy Taylor
 * Chris Brown
