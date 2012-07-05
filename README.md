@@ -2,8 +2,8 @@
 
 ## Tutorial
 
-Congratulations! You have entered into the lucrative business of Lithium Mining
-- the greatest of all alkali metals. I am you friendly guide... your...
+Congratulations! You have entered into the lucrative business of Lithium Mining - 
+the greatest of all alkali metals. I am you friendly guide... your...
 assistant you might say and my name is Lalapagaduweewee. As I'm sure you learnt
 when you were but a small waffle, lithium mining is all about moderation. I'll
 also remind you that as you learnt in kinderarteggfan school, the optimum
